@@ -1,6 +1,8 @@
 from PySide6.QtWidgets import QWidget, QApplication, QLineEdit, \
-    QPushButton, QVBoxLayout
-import sys, json
+    QPushButton, QVBoxLayout, QTextEdit
+import sys, json, os
+
+DATA_FILE_PATH = "user_data.json"
 
 
 class RegistrationForm(QWidget):
@@ -39,15 +41,22 @@ class RegistrationForm(QWidget):
         self.email_field.setPlaceholderText("Email")
         main_layout.addWidget(self.email_field)
 
+        # about
+        self.about_field = QTextEdit()
+        main_layout.addWidget(self.about_field)
+
         # save button
         save_button = QPushButton("Save")
         main_layout.addWidget(save_button)
 
+        # load saved data
+        self.load_action()
+
         # connect signals/slot mechanism
         save_button.clicked.connect(self.save_action)
-        self.first_name_field.textChanged.connect(self.first_name_changed)
 
     def save_action(self):
+        # get data from fields
         data_dictionary = {
             "first_name": self.first_name_field.text(),
             "last_name": self.last_name_field.text(),
@@ -56,11 +65,27 @@ class RegistrationForm(QWidget):
             "address": self.address_field.text()
         }
 
-        print(data_dictionary)
+        # write out data
+        with open(DATA_FILE_PATH, "w") as f:
+            json.dump(data_dictionary, f)
 
-    def first_name_changed(self, current_text):
-        print(current_text)
+        # clear fields
+        self.first_name_field.clear()
+        self.last_name_field.clear()
+        self.phone_field.clear()
+        self.email_field.clear()
+        self.address_field.clear()
 
+    def load_action(self):
+        if os.path.exists(DATA_FILE_PATH):
+            with open(DATA_FILE_PATH) as f:
+                user_data = json.load(f)
+
+                self.first_name_field.setText(user_data["first_name"])
+                self.last_name_field.setText(user_data["last_name"])
+                self.email_field.setText(user_data["email"])
+                self.phone_field.setText(user_data["phone"])
+                self.address_field.setText(user_data["address"])
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
