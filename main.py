@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QApplication, QLineEdit, \
     QPushButton, QVBoxLayout
-import sys
+import sys, json
 
 
 class RegistrationForm(QWidget):
