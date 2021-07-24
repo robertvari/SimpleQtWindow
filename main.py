@@ -1,12 +1,16 @@
 from PySide6.QtWidgets import QWidget, QApplication
 import sys
 
-app = QApplication(sys.argv)
 
-my_window = QWidget()
-my_window.setWindowTitle("My First Window")
-my_window.resize(1200, 900)
+class RegistrationForm(QWidget):
+    def __init__(self):
+        super().__init__()
 
-my_window.show()
 
-app.exec()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+
+    win = RegistrationForm()
+    win.show()
+
+    app.exec()
